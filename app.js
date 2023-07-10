@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const azure = require('azure-storage');
-const stream = require('stream');
-const got = require('got');
+const { Readable } = require('stream');
+const fetch = require('node-fetch');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,16 +21,18 @@ app.post('/upload', async (req, res) => {
   // 从 URL 下载文件内容
   let fileContent;
   try {
-    const response = await got(url, { responseType: 'buffer' });
-    fileContent = response.body;
+    const response = await fetch(url);
+    fileContent = await response.buffer();
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: '文件下载失败' });
   }
 
   // 创建可读流
-  const readableStream = new stream.PassThrough();
-  readableStream.end(fileContent);
+  const readableStream = new Readable();
+  readableStream._read = () => {};
+  readableStream.push(fileContent);
+  readableStream.push(null);
 
   // 上传文件至 Azure Blob 存储
   const fileName = `${Date.now()}.txt`;
