@@ -5,7 +5,7 @@ const azure = require('azure-storage');
 const app = express();
 app.use(bodyParser.json());
 
-const storageAccount = process.env.AK || 'your_storage_account_name';
+const storageAccount = process.env.ACC || 'your_storage_account_name';
 const storageAccessKey = process.env.AK || 'your_storage_access_key';
 const containerName = process.env.NAME || 'your_container_name';
 const PORT = process.env.PORT || 3000;
