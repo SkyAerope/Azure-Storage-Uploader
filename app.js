@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const azure = require('azure-storage');
 const { Readable } = require('stream');
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,8 +21,8 @@ app.post('/upload', async (req, res) => {
   // 从 URL 下载文件内容
   let fileContent;
   try {
-    const response = await fetch(url);
-    fileContent = await response.buffer();
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    fileContent = response.data;
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: '文件下载失败' });
