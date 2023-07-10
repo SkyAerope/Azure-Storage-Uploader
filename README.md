@@ -66,9 +66,12 @@
    response = requests.post(api_url, json=data)
 
    if response.status_code == 200:
-       print('文件上传成功')
+      json_response = response.json()
+      file_link = json_response['fileUrl']
+      print('文件上传成功')
+      print('文件链接:', file_link)
    else:
-       print('文件上传失败:', response.json())
+      print('文件上传失败:', response.json())
    ```
 
    确保将 `api_url` 替换为实际的API URL，以及 `file_url` 替换为要上传的文件的URL。

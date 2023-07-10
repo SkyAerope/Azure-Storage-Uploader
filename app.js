@@ -25,7 +25,8 @@ app.post('/upload', (req, res) => {
       return res.status(500).json({ error: '文件上传失败' });
     }
 
-    res.status(200).json({ message: '文件上传成功' });
+    const fileUrl = blobService.getUrl(containerName, fileName);
+    res.status(200).json({ message: '文件上传成功', fileUrl });
   });
 });
 
